@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
-    <RootNamespace>PipServices.Net</RootNamespace>
-    <AssemblyName>PipServices.Net.Test</AssemblyName>
+    <RootNamespace>PipServices.Messaging</RootNamespace>
+    <AssemblyName>PipServices.Messaging.Test</AssemblyName>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
@@ -19,18 +19,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\src.csproj" />
-    <ProjectReference Include="..\example\example.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Rest\DummyCommandableHttpByUriClientTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Status\" />
   </ItemGroup>
 </Project>

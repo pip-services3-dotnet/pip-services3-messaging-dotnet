@@ -1,12 +1,12 @@
-﻿using PipServices.Commons.Auth;
-using PipServices.Commons.Connect;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PipServices.Components.Auth;
+using PipServices.Components.Connect;
 
-namespace PipServices.Net.Messaging
+namespace PipServices.Messaging.Queues
 {
     /// <summary>
     /// Local message queue to be used in automated tests

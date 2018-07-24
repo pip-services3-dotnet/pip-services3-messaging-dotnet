@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PipServices.Net.Messaging
+namespace PipServices.Messaging.Queues
 {
     public interface IMessageQueue : IOpenable
     {

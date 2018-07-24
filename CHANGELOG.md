@@ -1,4 +1,9 @@
-# Communication components for Pip.Services in .NET Changelog
+# Asynchronous messaging for Pip.Services in .NET Changelog
+
+## <a name="3.0.0"></a> 3.0.0 (2018-08-23)
+
+### Breaking Changes
+* Moved to a separate package
 
 ## <a name="2.3.4"></a> 2.3.4 (2018-06-11)
 * **status** Added StatusRestService

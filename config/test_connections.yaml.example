@@ -1,1 +1,0 @@
-msmq_queue:  "path=.\private$\testqueue"

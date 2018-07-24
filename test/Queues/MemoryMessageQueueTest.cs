@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace PipServices.Net.Messaging
+namespace PipServices.Messaging.Queues
 {
     public class MemoryMessageQueueTest
     {

@@ -4,7 +4,7 @@ using System;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace PipServices.Net.Messaging
+namespace PipServices.Messaging.Queues
 {
     [DataContract]
     public class MessageEnvelop

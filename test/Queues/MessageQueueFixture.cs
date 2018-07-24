@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PipServices.Net.Messaging
+namespace PipServices.Messaging.Queues
 {
     public class MessageQueueFixture
     {
