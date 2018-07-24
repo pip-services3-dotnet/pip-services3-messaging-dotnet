@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyName>PipServices.Net.Example</AssemblyName>
+    <RootNamespace>PipServices.Net</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PipServices.Commons" Version="2.3.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\src.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Rest\DummyCommandableHttpServiceV2.cs" />
+    <Compile Remove="Rest\DummyCommandableHttpServiceV2.cs" />
+  </ItemGroup>
+</Project>
