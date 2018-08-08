@@ -7,11 +7,11 @@ using System.Text;
 namespace PipServices.Messaging.Queues
 {
     [DataContract]
-    public class MessageEnvelop
+    public class MessageEnvelope
     {
-        public MessageEnvelop() { }
+        public MessageEnvelope() { }
 
-        public MessageEnvelop(string correlationId, string messageType, string message)
+        public MessageEnvelope(string correlationId, string messageType, string message)
         {
             CorrelationId = correlationId;
             MessageType = messageType;
@@ -19,7 +19,7 @@ namespace PipServices.Messaging.Queues
             MessageId = IdGenerator.NextLong();
         }
 
-        public MessageEnvelop(string correlationId, string messageType, object message)
+        public MessageEnvelope(string correlationId, string messageType, object message)
         {
             CorrelationId = correlationId;
             MessageType = messageType;
