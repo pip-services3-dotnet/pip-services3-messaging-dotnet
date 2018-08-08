@@ -52,7 +52,7 @@ namespace PipServices.Messaging.Queues
             await OpenAsync(correlationId, connection, credential);
         }
 
-        public abstract bool IsOpened();
+        public abstract bool IsOpen();
         public abstract Task OpenAsync(string correlationId, ConnectionParams connection, CredentialParams credential);
 
         public abstract Task CloseAsync(string correlationId);
@@ -65,41 +65,41 @@ namespace PipServices.Messaging.Queues
 
         public abstract long? MessageCount { get; }
 
-        public abstract Task SendAsync(string correlationId, MessageEnvelop message);
+        public abstract Task SendAsync(string correlationId, MessageEnvelope message);
 
         public async Task SendAsync(string correlationId, string messageType, string message)
         {
-            var envelop = new MessageEnvelop(correlationId, messageType, message);
-            await SendAsync(correlationId, envelop);
+            var envelope = new MessageEnvelope(correlationId, messageType, message);
+            await SendAsync(correlationId, envelope);
         }
 
         public async Task SendAsObjectAsync(string correlationId, string messageType, object message)
         {
-            var envelop = new MessageEnvelop(correlationId, messageType, message);
-            await SendAsync(correlationId, envelop);
+            var envelope = new MessageEnvelope(correlationId, messageType, message);
+            await SendAsync(correlationId, envelope);
         }
 
-        public abstract Task<MessageEnvelop> PeekAsync(string correlationId);
-        public abstract Task<List<MessageEnvelop>> PeekBatchAsync(string correlationId, int messageCount);
-        public abstract Task<MessageEnvelop> ReceiveAsync(string correlationId, long waitTimeout);
-        public abstract Task RenewLockAsync(MessageEnvelop message, long lockTimeout);
-        public abstract Task AbandonAsync(MessageEnvelop message);
-        public abstract Task CompleteAsync(MessageEnvelop message);
-        public abstract Task MoveToDeadLetterAsync(MessageEnvelop message);
+        public abstract Task<MessageEnvelope> PeekAsync(string correlationId);
+        public abstract Task<List<MessageEnvelope>> PeekBatchAsync(string correlationId, int messageCount);
+        public abstract Task<MessageEnvelope> ReceiveAsync(string correlationId, long waitTimeout);
+        public abstract Task RenewLockAsync(MessageEnvelope message, long lockTimeout);
+        public abstract Task AbandonAsync(MessageEnvelope message);
+        public abstract Task CompleteAsync(MessageEnvelope message);
+        public abstract Task MoveToDeadLetterAsync(MessageEnvelope message);
 
         public Task ListenAsync(string correlationId, IMessageReceiver receiver)
         {
             return ListenAsync(correlationId, receiver.ReceiveMessageAsync);
         }
 
-        public abstract Task ListenAsync(string correlationId, Func<MessageEnvelop, IMessageQueue, Task> callback);
+        public abstract Task ListenAsync(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback);
 
         public void BeginListen(string correlationId, IMessageReceiver receiver)
         {
             BeginListen(correlationId, receiver.ReceiveMessageAsync);
         }
 
-        public void BeginListen(string correlationId, Func<MessageEnvelop, IMessageQueue, Task> callback)
+        public void BeginListen(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback)
         {
             ThreadPool.QueueUserWorkItem(async delegate {
                 await ListenAsync(correlationId, callback);

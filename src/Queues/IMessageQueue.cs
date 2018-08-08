@@ -11,22 +11,22 @@ namespace PipServices.Messaging.Queues
         MessagingCapabilities Capabilities { get; }
         long? MessageCount { get; }
 
-        Task SendAsync(string correlationId, MessageEnvelop envelop);
+        Task SendAsync(string correlationId, MessageEnvelope envelope);
         Task SendAsync(string correlationId, string messageType, string message);
         Task SendAsObjectAsync(string correlationId, string messageType, object message);
-        Task<MessageEnvelop> PeekAsync(string correlationId);
-        Task<List<MessageEnvelop>> PeekBatchAsync(string correlationId, int messageCount);
-        Task<MessageEnvelop> ReceiveAsync(string correlationId, long waitTimeout);
+        Task<MessageEnvelope> PeekAsync(string correlationId);
+        Task<List<MessageEnvelope>> PeekBatchAsync(string correlationId, int messageCount);
+        Task<MessageEnvelope> ReceiveAsync(string correlationId, long waitTimeout);
 
-        Task RenewLockAsync(MessageEnvelop message, long lockTimeout);
-        Task CompleteAsync(MessageEnvelop message);
-        Task AbandonAsync(MessageEnvelop message);
-        Task MoveToDeadLetterAsync(MessageEnvelop message);
+        Task RenewLockAsync(MessageEnvelope message, long lockTimeout);
+        Task CompleteAsync(MessageEnvelope message);
+        Task AbandonAsync(MessageEnvelope message);
+        Task MoveToDeadLetterAsync(MessageEnvelope message);
 
         Task ListenAsync(string correlationId, IMessageReceiver receiver);
-        Task ListenAsync(string correlationId, Func<MessageEnvelop, IMessageQueue, Task> callback);
+        Task ListenAsync(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback);
         void BeginListen(string correlationId, IMessageReceiver receiver);
-        void BeginListen(string correlationId, Func<MessageEnvelop, IMessageQueue, Task> callback);
+        void BeginListen(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback);
         void EndListen(string correlationId);
     }
 }

@@ -14,7 +14,7 @@ namespace PipServices.Messaging.Queues
     public class MemoryMessageQueue : MessageQueue
     {
         private ManualResetEvent _receiveEvent = new ManualResetEvent(false);
-        private Queue<MessageEnvelop> _messages = new Queue<MessageEnvelop>();
+        private Queue<MessageEnvelope> _messages = new Queue<MessageEnvelope>();
         private int _lockTokenSequence = 0;
         private Dictionary<int, LockedMessage> _lockedMessages = new Dictionary<int, LockedMessage>();
         private CancellationTokenSource _cancel = new CancellationTokenSource();
@@ -22,7 +22,7 @@ namespace PipServices.Messaging.Queues
 
         private class LockedMessage
         {
-            public MessageEnvelop Message { get; set; }
+            public MessageEnvelope Message { get; set; }
             public DateTime ExpirationTimeUtc { get; set; }
             public TimeSpan Timeout { get; set; }
         }
@@ -35,7 +35,7 @@ namespace PipServices.Messaging.Queues
             Capabilities = new MessagingCapabilities(true, true, true, true, true, true, true, false, true);
         }
 
-        public override bool IsOpened()
+        public override bool IsOpen()
         {
             return _opened;
         }
@@ -69,14 +69,14 @@ namespace PipServices.Messaging.Queues
             }
         }
 
-        public override async Task SendAsync(string correlationId, MessageEnvelop message)
+        public override async Task SendAsync(string correlationId, MessageEnvelope message)
         {
             await Task.Yield();
             //await Task.Delay(0);
 
             lock (_lock)
             {
-                message.SentTimeUtc = DateTime.UtcNow;
+                message.SentTime = DateTime.UtcNow;
 
                 // Add message to the queue
                 _messages.Enqueue(message);
@@ -89,9 +89,9 @@ namespace PipServices.Messaging.Queues
             _logger.Debug(message.CorrelationId, "Sent message {0} via {1}", message, this);
         }
 
-        public override async Task<MessageEnvelop> PeekAsync(string correlationId)
+        public override async Task<MessageEnvelope> PeekAsync(string correlationId)
         {
-            MessageEnvelop message = null;
+            MessageEnvelope message = null;
 
             lock (_lock)
             {
@@ -108,9 +108,9 @@ namespace PipServices.Messaging.Queues
             return await Task.FromResult(message);
         }
 
-        public override async Task<List<MessageEnvelop>> PeekBatchAsync(string correlationId, int messageCount)
+        public override async Task<List<MessageEnvelope>> PeekBatchAsync(string correlationId, int messageCount)
         {
-            List<MessageEnvelop> messages = null;
+            List<MessageEnvelope> messages = null;
 
             lock (_lock)
             {
@@ -123,7 +123,7 @@ namespace PipServices.Messaging.Queues
         }
 
 
-        public override async Task<MessageEnvelop> ReceiveAsync(string correlationId, long waitTimeout)
+        public override async Task<MessageEnvelope> ReceiveAsync(string correlationId, long waitTimeout)
         {
             await Task.Delay(0);
 
@@ -137,7 +137,7 @@ namespace PipServices.Messaging.Queues
 
             _receiveEvent.WaitOne(TimeSpan.FromMilliseconds(waitTimeout));
 
-            MessageEnvelop message = null;
+            MessageEnvelope message = null;
 
             lock (_lock)
             {
@@ -173,7 +173,7 @@ namespace PipServices.Messaging.Queues
             return message;
         }
 
-        public override async Task RenewLockAsync(MessageEnvelop message, long lockTimeout)
+        public override async Task RenewLockAsync(MessageEnvelope message, long lockTimeout)
         {
             if (message.Reference == null) return;
 
@@ -199,7 +199,7 @@ namespace PipServices.Messaging.Queues
             await Task.Delay(0);
         }
 
-        public override async Task AbandonAsync(MessageEnvelop message)
+        public override async Task AbandonAsync(MessageEnvelope message)
         {
             if (message.Reference == null) return;
 
@@ -228,7 +228,7 @@ namespace PipServices.Messaging.Queues
             await SendAsync(message.CorrelationId, message);
         }
 
-        public override async Task CompleteAsync(MessageEnvelop message)
+        public override async Task CompleteAsync(MessageEnvelope message)
         {
             if (message.Reference == null) return;
 
@@ -244,7 +244,7 @@ namespace PipServices.Messaging.Queues
             await Task.Delay(0);
         }
 
-        public override async Task MoveToDeadLetterAsync(MessageEnvelop message)
+        public override async Task MoveToDeadLetterAsync(MessageEnvelope message)
         {
             if (message.Reference == null) return;
 
@@ -261,7 +261,7 @@ namespace PipServices.Messaging.Queues
             await Task.Delay(0);
         }
 
-        public override async Task ListenAsync(string correlationId, Func<MessageEnvelop, IMessageQueue, Task> callback)
+        public override async Task ListenAsync(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback)
         {
             _logger.Trace(null, "Started listening messages at {0}", this);
 

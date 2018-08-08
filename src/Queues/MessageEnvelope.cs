@@ -40,7 +40,7 @@ namespace PipServices.Messaging.Queues
         public string MessageType { get; set; }
 
         [DataMember]
-        public DateTime SentTimeUtc { get; set; }
+        public DateTime SentTime { get; set; }
 
         [DataMember]
         public string Message { get; set; }
