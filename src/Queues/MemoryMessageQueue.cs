@@ -9,8 +9,29 @@ using PipServices.Components.Connect;
 namespace PipServices.Messaging.Queues
 {
     /// <summary>
-    /// Local message queue to be used in automated tests
+    /// Message queue that sends and receives messages within the same process by using shared memory.
+    /// 
+    /// This queue is typically used for testing to mock real queues.
+    /// 
+    /// ### Configuration parameters ###
+    /// 
+    /// name:                        name of the message queue
+    /// 
+    /// ### References ###
+    /// 
+    /// - *:logger:*:*:1.0           (optional) ILogger components to pass log messages
+    /// - *:counters:*:*:1.0         (optional) ICounters components to pass collected measurements
     /// </summary>
+    /// <example>
+    /// <code>
+    /// var queue = new MessageQueue("myqueue");
+    /// 
+    /// queue.Send("123", new MessageEnvelop(null, "mymessage", "ABC"));
+    /// 
+    /// queue.Receive("123", 0);
+    /// </code>
+    /// </example>
+    /// See <see cref="MessageQueue"/>, <see cref="MessagingCapabilities"/>
     public class MemoryMessageQueue : MessageQueue
     {
         private ManualResetEvent _receiveEvent = new ManualResetEvent(false);
@@ -27,6 +48,11 @@ namespace PipServices.Messaging.Queues
             public TimeSpan Timeout { get; set; }
         }
 
+        /// <summary>
+        /// Creates a new instance of the message queue.
+        /// </summary>
+        /// <param name="name">(optional) a queue name.</param>
+        /// See <see cref="MessagingCapabilities"/>
         public MemoryMessageQueue(string name = null)
             : base(name)
         {
@@ -35,17 +61,31 @@ namespace PipServices.Messaging.Queues
             Capabilities = new MessagingCapabilities(true, true, true, true, true, true, true, false, true);
         }
 
+        /// <summary>
+        /// Checks if the component is opened.
+        /// </summary>
+        /// <returns>true if the component has been opened and false otherwise.</returns>
         public override bool IsOpen()
         {
             return _opened;
         }
 
+        /// <summary>
+        /// Opens the component with given connection and credential parameters.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
+        /// <param name="connection">connection parameters</param>
+        /// <param name="credential">credential parameters</param>
         public async override Task OpenAsync(string correlationId, ConnectionParams connection, CredentialParams credential)
         {
             _opened = true;
             await Task.Delay(0);
         }
 
+        /// <summary>
+        /// Closes component and frees used resources.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
         public override async Task CloseAsync(string correlationId)
         {
             _opened = false;
@@ -58,6 +98,9 @@ namespace PipServices.Messaging.Queues
             await Task.Delay(0);
         }
 
+        /// <summary>
+        /// Gets the current number of messages in the queue to be delivered.
+        /// </summary>
         public override long? MessageCount
         {
             get
@@ -69,6 +112,11 @@ namespace PipServices.Messaging.Queues
             }
         }
 
+        /// <summary>
+        /// Sends a message into the queue.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
+        /// <param name="envelope">a message envelop to be sent.</param>
         public override async Task SendAsync(string correlationId, MessageEnvelope message)
         {
             await Task.Yield();
@@ -89,6 +137,12 @@ namespace PipServices.Messaging.Queues
             _logger.Debug(message.CorrelationId, "Sent message {0} via {1}", message, this);
         }
 
+        /// <summary>
+        /// Peeks a single incoming message from the queue without removing it. If there
+        /// are no messages available in the queue it returns null.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
+        /// <returns>a message envelop object.</returns>
         public override async Task<MessageEnvelope> PeekAsync(string correlationId)
         {
             MessageEnvelope message = null;
@@ -108,6 +162,13 @@ namespace PipServices.Messaging.Queues
             return await Task.FromResult(message);
         }
 
+        // <summary>
+        /// Peeks multiple incoming messages from the queue without removing them. If
+        /// there are no messages available in the queue it returns an empty list.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
+        /// <param name="messageCount">a maximum number of messages to peek.</param>
+        /// <returns> list with messages.</returns>
         public override async Task<List<MessageEnvelope>> PeekBatchAsync(string correlationId, int messageCount)
         {
             List<MessageEnvelope> messages = null;
@@ -122,7 +183,12 @@ namespace PipServices.Messaging.Queues
             return await Task.FromResult(messages);
         }
 
-
+        /// <summary>
+        /// Receives an incoming message and removes it from the queue.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
+        /// <param name="waitTimeout">a timeout in milliseconds to wait for a message to come.</param>
+        /// <returns>a message envelop object.</returns>
         public override async Task<MessageEnvelope> ReceiveAsync(string correlationId, long waitTimeout)
         {
             await Task.Delay(0);
@@ -173,6 +239,12 @@ namespace PipServices.Messaging.Queues
             return message;
         }
 
+        /// <summary>
+        /// Renews a lock on a message that makes it invisible from other receivers in
+        /// the queue.This method is usually used to extend the message processing time.
+        /// </summary>
+        /// <param name="message">a message to extend its lock.</param>
+        /// <param name="lockTimeout">a locking timeout in milliseconds.</param>
         public override async Task RenewLockAsync(MessageEnvelope message, long lockTimeout)
         {
             if (message.Reference == null) return;
@@ -199,6 +271,13 @@ namespace PipServices.Messaging.Queues
             await Task.Delay(0);
         }
 
+        /// <summary>
+        /// Returns message into the queue and makes it available for all subscribers to
+        /// receive it again.This method is usually used to return a message which could
+        /// not be processed at the moment to repeat the attempt.Messages that cause
+        /// unrecoverable errors shall be removed permanently or/and send to dead letter queue.
+        /// </summary>
+        /// <param name="message">a message to return.</param>
         public override async Task AbandonAsync(MessageEnvelope message)
         {
             if (message.Reference == null) return;
@@ -228,6 +307,11 @@ namespace PipServices.Messaging.Queues
             await SendAsync(message.CorrelationId, message);
         }
 
+        /// <summary>
+        /// Permanently removes a message from the queue. This method is usually used to
+        /// remove the message after successful processing.
+        /// </summary>
+        /// <param name="message">a message to remove.</param>
         public override async Task CompleteAsync(MessageEnvelope message)
         {
             if (message.Reference == null) return;
@@ -244,6 +328,10 @@ namespace PipServices.Messaging.Queues
             await Task.Delay(0);
         }
 
+        /// <summary>
+        /// Permanently removes a message from the queue and sends it to dead letter queue.
+        /// </summary>
+        /// <param name="message">a message to be removed.</param>
         public override async Task MoveToDeadLetterAsync(MessageEnvelope message)
         {
             if (message.Reference == null) return;
@@ -288,11 +376,21 @@ namespace PipServices.Messaging.Queues
             }
         }
 
+        /// <summary>
+        /// Ends listening for incoming messages. When this method is call listen() 
+        /// unblocks the thread and execution continues.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
         public override void EndListen(string correlationId)
         {
             _cancel.Cancel();
         }
 
+        /// <summary>
+        /// Clears component state.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
+        /// <returns></returns>
         public override async Task ClearAsync(string correlationId)
         {
             lock (_lock)
