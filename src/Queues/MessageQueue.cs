@@ -16,26 +16,28 @@ namespace PipServices.Messaging.Queues
     /// 
     /// ### Configuration parameters ###
     /// 
-    /// name:                        name of the message queue
+    /// - name:                        name of the message queue
+    /// 
     /// connection(s):
-    /// discovery_key:             key to retrieve parameters from discovery service
-    /// protocol:                  connection protocol like http, https, tcp, udp
-    /// host:                      host name or IP address
-    /// port:                      port number
-    /// uri:                       resource URI or connection string with all parameters in it
+    /// - discovery_key:             key to retrieve parameters from discovery service
+    /// - protocol:                  connection protocol like http, https, tcp, udp
+    /// - host:                      host name or IP address
+    /// - port:                      port number
+    /// - uri:                       resource URI or connection string with all parameters in it
+    /// 
     /// credential(s):
-    /// store_key:                 key to retrieve parameters from credential store
-    /// username:                  user name
-    /// password:                  user password
-    /// access_id:                 application access id
-    /// access_key:                application secret key
+    /// - store_key:                 key to retrieve parameters from credential store
+    /// - username:                  user name
+    /// - password:                  user password
+    /// - access_id:                 application access id
+    /// - access_key:                application secret key
     /// 
     /// ### References ###
     /// 
-    /// - *:logger:*:*:1.0           (optional) ILogger components to pass log messages
-    /// - *:counters:*:*:1.0         (optional) ICounters components to pass collected measurements
-    /// - *:discovery:*:*:1.0        (optional) IDiscovery components to discover connection(s)
-    /// - *:credential-store:*:*:1.0 (optional) ICredentialStore componetns to lookup credential(s)
+    /// - *:logger:*:*:1.0           (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_log_1_1_i_logger.html">ILogger</a> components to pass log messages
+    /// - *:counters:*:*:1.0         (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_count_1_1_i_counters.html">ICounters</a> components to pass collected measurements
+    /// - *:discovery:*:*:1.0        (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_connect_1_1_i_discovery.html">IDiscovery</a> components to discover connection(s)
+    /// - *:credential-store:*:*:1.0 (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_auth_1_1_i_credential_store.html">ICredentialStore</a> componetns to lookup credential(s)
     /// </summary>
     public abstract class MessageQueue : IMessageQueue, IReferenceable, IConfigurable
     {

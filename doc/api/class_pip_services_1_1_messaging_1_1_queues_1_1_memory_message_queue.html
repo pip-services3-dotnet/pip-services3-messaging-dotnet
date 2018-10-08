@@ -255,11 +255,13 @@ object&#160;</td><td class="memItemRight" valign="bottom"><b>_lock</b> = new obj
 <div class="textblock"><p>Message queue that sends and receives messages within the same process by using shared memory. </p>
 <p>This queue is typically used for testing to mock real queues.</p>
 <h3>Configuration parameters</h3>
-<p>name: name of the message queue</p>
+<ul>
+<li>name: name of the message queue</li>
+</ul>
 <h3>References</h3>
 <ul>
-<li>*:logger:*:*:1.0 (optional) ILogger components to pass log messages</li>
-<li>*:counters:*:*:1.0 (optional) ICounters components to pass collected measurements </li>
+<li>*:logger:*:*:1.0 (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_log_1_1_i_logger.html">ILogger</a> components to pass log messages</li>
+<li>*:counters:*:*:1.0 (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_count_1_1_i_counters.html">ICounters</a> components to pass collected measurements </li>
 </ul>
 <div class="fragment"><div class="line">var queue = <span class="keyword">new</span> <a class="code" href="class_pip_services_1_1_messaging_1_1_queues_1_1_message_queue.html#abb502d9d93d9de853218042c5896ac92">MessageQueue</a>(<span class="stringliteral">&quot;myqueue&quot;</span>);</div><div class="line"></div><div class="line">queue.Send(<span class="stringliteral">&quot;123&quot;</span>, <span class="keyword">new</span> MessageEnvelop(null, <span class="stringliteral">&quot;mymessage&quot;</span>, <span class="stringliteral">&quot;ABC&quot;</span>));</div><div class="line"></div><div class="line">queue.Receive(<span class="stringliteral">&quot;123&quot;</span>, 0);</div></div><!-- fragment --> <p>See <a class="el" href="class_pip_services_1_1_messaging_1_1_queues_1_1_message_queue.html" title="Abstract message queue that is used as a basis for specific message queue implementations. ">MessageQueue</a>, <a class="el" href="class_pip_services_1_1_messaging_1_1_queues_1_1_messaging_capabilities.html" title="Data object that contains supported capabilities of a message queue. If certain capability is not sup...">MessagingCapabilities</a> </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
