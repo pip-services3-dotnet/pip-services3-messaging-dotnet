@@ -1,10 +1,10 @@
-﻿using PipServices.Commons.Convert;
-using PipServices.Commons.Data;
+﻿using PipServices3.Commons.Convert;
+using PipServices3.Commons.Data;
 using System;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace PipServices.Messaging.Queues
+namespace PipServices3.Messaging.Queues
 {
     /// <summary>
     /// Allows adding additional information to messages. A correlation id, message id, and a message type

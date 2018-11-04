@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using PipServices.Commons.Config;
-using PipServices.Commons.Refer;
-using PipServices.Components.Auth;
-using PipServices.Components.Connect;
-using PipServices.Components.Count;
-using PipServices.Components.Log;
+using PipServices3.Commons.Config;
+using PipServices3.Commons.Refer;
+using PipServices3.Components.Auth;
+using PipServices3.Components.Connect;
+using PipServices3.Components.Count;
+using PipServices3.Components.Log;
 
-namespace PipServices.Messaging.Queues
+namespace PipServices3.Messaging.Queues
 {
     /// <summary>
     /// Abstract message queue that is used as a basis for specific message queue implementations.
@@ -34,10 +34,10 @@ namespace PipServices.Messaging.Queues
     /// 
     /// ### References ###
     /// 
-    /// - *:logger:*:*:1.0           (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_log_1_1_i_logger.html">ILogger</a> components to pass log messages
-    /// - *:counters:*:*:1.0         (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_count_1_1_i_counters.html">ICounters</a> components to pass collected measurements
-    /// - *:discovery:*:*:1.0        (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_connect_1_1_i_discovery.html">IDiscovery</a> components to discover connection(s)
-    /// - *:credential-store:*:*:1.0 (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_auth_1_1_i_credential_store.html">ICredentialStore</a> componetns to lookup credential(s)
+    /// - *:logger:*:*:1.0           (optional) <a href="https://rawgit.com/pip-services3-dotnet/pip-services3-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_log_1_1_i_logger.html">ILogger</a> components to pass log messages
+    /// - *:counters:*:*:1.0         (optional) <a href="https://rawgit.com/pip-services3-dotnet/pip-services3-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_count_1_1_i_counters.html">ICounters</a> components to pass collected measurements
+    /// - *:discovery:*:*:1.0        (optional) <a href="https://rawgit.com/pip-services3-dotnet/pip-services3-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_connect_1_1_i_discovery.html">IDiscovery</a> components to discover connection(s)
+    /// - *:credential-store:*:*:1.0 (optional) <a href="https://rawgit.com/pip-services3-dotnet/pip-services3-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_auth_1_1_i_credential_store.html">ICredentialStore</a> componetns to lookup credential(s)
     /// </summary>
     public abstract class MessageQueue : IMessageQueue, IReferenceable, IConfigurable
     {

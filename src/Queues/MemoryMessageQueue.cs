@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PipServices.Components.Auth;
-using PipServices.Components.Connect;
+using PipServices3.Components.Auth;
+using PipServices3.Components.Connect;
 
-namespace PipServices.Messaging.Queues
+namespace PipServices3.Messaging.Queues
 {
     /// <summary>
     /// Message queue that sends and receives messages within the same process by using shared memory.
@@ -19,8 +19,8 @@ namespace PipServices.Messaging.Queues
     /// 
     /// ### References ###
     /// 
-    /// - *:logger:*:*:1.0           (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_log_1_1_i_logger.html">ILogger</a> components to pass log messages
-    /// - *:counters:*:*:1.0         (optional) <a href="https://rawgit.com/pip-services-dotnet/pip-services-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_count_1_1_i_counters.html">ICounters</a> components to pass collected measurements
+    /// - *:logger:*:*:1.0           (optional) <a href="https://rawgit.com/pip-services3-dotnet/pip-services3-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_log_1_1_i_logger.html">ILogger</a> components to pass log messages
+    /// - *:counters:*:*:1.0         (optional) <a href="https://rawgit.com/pip-services3-dotnet/pip-services3-components-dotnet/master/doc/api/interface_pip_services_1_1_components_1_1_count_1_1_i_counters.html">ICounters</a> components to pass collected measurements
     /// </summary>
     /// <example>
     /// <code>

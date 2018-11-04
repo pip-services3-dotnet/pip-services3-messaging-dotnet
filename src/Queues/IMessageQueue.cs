@@ -1,9 +1,9 @@
-﻿using PipServices.Commons.Run;
+﻿using PipServices3.Commons.Run;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PipServices.Messaging.Queues
+namespace PipServices3.Messaging.Queues
 {
     /// <summary>
     /// Interface for asynchronous message queues.

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PipServices.Messaging.Queues
+namespace PipServices3.Messaging.Queues
 {
     /// <summary>
     /// Callback interface to receive incoming messages.

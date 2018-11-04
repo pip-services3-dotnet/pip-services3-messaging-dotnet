@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
-    <RootNamespace>PipServices.Messaging</RootNamespace>
-    <AssemblyName>PipServices.Messaging.Test</AssemblyName>
+    <RootNamespace>PipServices3.Messaging</RootNamespace>
+    <AssemblyName>PipServices3.Messaging.Test</AssemblyName>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />

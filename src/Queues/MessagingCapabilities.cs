@@ -1,4 +1,4 @@
-﻿namespace PipServices.Messaging.Queues
+﻿namespace PipServices3.Messaging.Queues
 {
     /// <summary>
     /// Data object that contains supported capabilities of a message queue.
