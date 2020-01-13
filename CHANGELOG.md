@@ -1,9 +1,10 @@
 # Asynchronous messaging for Pip.Services in .NET Changelog
 
-## <a name="3.0.0"></a> 3.0.0 (2018-08-23)
+## <a name="3.0.0-3.0.3"></a> 3.0.0-3.0.3 (2020-01-13)
 
 ### Breaking Changes
 * Moved to a separate package
+* Added 'pip-services' descriptors
 
 ## <a name="2.3.4"></a> 2.3.4 (2018-06-11)
 * **status** Added StatusRestService
