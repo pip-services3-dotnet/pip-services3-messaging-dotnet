@@ -1,7 +1,0 @@
-var searchData=
-[
-  ['clearasync',['ClearAsync',['../class_pip_services_1_1_messaging_1_1_queues_1_1_memory_message_queue.html#a7ff0279247a897ad4e41681de11a522f',1,'PipServices3.Messaging.Queues.MemoryMessageQueue.ClearAsync()'],['../class_pip_services_1_1_messaging_1_1_queues_1_1_message_queue.html#a5964c8b7f616d192e9781b9321814ba5',1,'PipServices3.Messaging.Queues.MessageQueue.ClearAsync()']]],
-  ['closeasync',['CloseAsync',['../class_pip_services_1_1_messaging_1_1_queues_1_1_memory_message_queue.html#a5ba063bb10e0afe66012604ca12d4dd4',1,'PipServices3.Messaging.Queues.MemoryMessageQueue.CloseAsync()'],['../class_pip_services_1_1_messaging_1_1_queues_1_1_message_queue.html#a2fb0dc1b0390c4be9b9a64362ce07ed6',1,'PipServices3.Messaging.Queues.MessageQueue.CloseAsync()']]],
-  ['completeasync',['CompleteAsync',['../interface_pip_services_1_1_messaging_1_1_queues_1_1_i_message_queue.html#aa8e7daf8332ca634a91e4691c96fde2d',1,'PipServices3.Messaging.Queues.IMessageQueue.CompleteAsync()'],['../class_pip_services_1_1_messaging_1_1_queues_1_1_memory_message_queue.html#a15ed52dc9d6b22417760b5e3d0d947df',1,'PipServices3.Messaging.Queues.MemoryMessageQueue.CompleteAsync()'],['../class_pip_services_1_1_messaging_1_1_queues_1_1_message_queue.html#a723dd3dcad10e024818a5635ac7404e7',1,'PipServices3.Messaging.Queues.MessageQueue.CompleteAsync()']]],
-  ['configure',['Configure',['../class_pip_services_1_1_messaging_1_1_queues_1_1_message_queue.html#a0132a3e74f2f4a1cfcf2d9bd6b50dd99',1,'PipServices3::Messaging::Queues::MessageQueue']]]
-];
