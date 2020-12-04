@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['defaultmessagingfactory',['DefaultMessagingFactory',['../class_pip_services_1_1_messaging_1_1_build_1_1_default_messaging_factory.html',1,'PipServices3.Messaging.Build.DefaultMessagingFactory'],['../class_pip_services_1_1_messaging_1_1_build_1_1_default_messaging_factory.html#a663b90198afbcfd793d3d66a2743a7cb',1,'PipServices3.Messaging.Build.DefaultMessagingFactory.DefaultMessagingFactory()']]]
+  ['defaultmessagingfactory',['DefaultMessagingFactory',['../class_pip_services3_1_1_messaging_1_1_build_1_1_default_messaging_factory.html',1,'PipServices3.Messaging.Build.DefaultMessagingFactory'],['../class_pip_services3_1_1_messaging_1_1_build_1_1_default_messaging_factory.html#a7ba732203018698d150368bacb6ba8f1',1,'PipServices3.Messaging.Build.DefaultMessagingFactory.DefaultMessagingFactory()']]]
 ];
