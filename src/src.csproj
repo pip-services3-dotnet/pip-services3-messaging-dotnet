@@ -5,7 +5,7 @@
     <AssemblyName>PipServices3.Messaging</AssemblyName>
     <ApplicationIcon />
     <Win32Resource />
-    <Version>3.1.1</Version>
+    <Version>3.2.0</Version>
     <Authors>Sergey Seroukhov, Volodymyr Tkachenko, Alex Mazur, Danyil Tretiakov</Authors>
     <Copyright>Conceptual Vision Consulting LLC. 2017-2020</Copyright>
     <Description>Asynchronous messaging for Pip.Services in .NET</Description>
@@ -18,7 +18,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="PipServices3.Commons" Version="3.1.1" />
-    <PackageReference Include="PipServices3.Components" Version="3.1.1" />
+    <PackageReference Include="PipServices3.Commons" Version="3.1.2" />
+    <PackageReference Include="PipServices3.Components" Version="3.1.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Connect\" />
+    <Folder Include="Test\" />
   </ItemGroup>
 </Project>
