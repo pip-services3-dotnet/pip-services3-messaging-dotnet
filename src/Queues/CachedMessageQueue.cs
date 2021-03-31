@@ -54,8 +54,6 @@ namespace PipServices3.Messaging.Queues
                 return;
             }
 
-            await base.OpenAsync(correlationId);
-
             try
             {
                 // Autosubscribe right away

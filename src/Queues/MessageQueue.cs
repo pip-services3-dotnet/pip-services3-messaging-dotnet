@@ -110,8 +110,6 @@ namespace PipServices3.Messaging.Queues
         /// Opens the component with given connection and credential parameters.
         /// </summary>
         /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
-        /// <param name="connections">connection parameters</param>
-        /// <param name="credential">credential parameters</param>
         public virtual Task OpenAsync(string correlationId, List<ConnectionParams> connections, CredentialParams credential)
         {
             throw new NotImplementedException();
