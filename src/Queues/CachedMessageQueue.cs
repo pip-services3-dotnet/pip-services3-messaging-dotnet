@@ -14,7 +14,7 @@ namespace PipServices3.Messaging.Queues
     /// 
     /// This queue is users as a base implementation for other queues
     /// </summary>
-    public abstract class CacheMessageQueue : MessageQueue, ICleanable
+    public abstract class CachedMessageQueue : MessageQueue, ICleanable
     {
         protected ManualResetEvent _receiveEvent = new ManualResetEvent(false);
         protected Queue<MessageEnvelope> _messages = new Queue<MessageEnvelope>();
@@ -26,7 +26,7 @@ namespace PipServices3.Messaging.Queues
         /// </summary>
         /// <param name="name">(optional) a queue name.</param>
         /// See <see cref="MessagingCapabilities"/>
-        public CacheMessageQueue(string name = null, MessagingCapabilities capabilities = null)
+        public CachedMessageQueue(string name = null, MessagingCapabilities capabilities = null)
             : base(name, capabilities)
         { }
 
