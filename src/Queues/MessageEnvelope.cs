@@ -32,7 +32,7 @@ namespace PipServices3.Messaging.Queues
         {
             CorrelationId = correlationId;
             MessageType = messageType;
-            Message = message;
+            MessageBuffer = message;
             MessageId = IdGenerator.NextLong();
         }
 
@@ -88,32 +88,46 @@ namespace PipServices3.Messaging.Queues
 
         /** The stored message. */
         [IgnoreDataMember]
-        public byte[] Message { get; set; }
+        public byte[] MessageBuffer { get; set; }
 
         /** Used for serialization */
         [DataMember(Name = "message")]
+        public string Message
+        {
+            get
+            {
+                return GetMessageAsString();
+            }
+            set
+            {
+                SetMessageAsString(value);
+            }
+        }
+
+        /** Used for serialization */
+        [DataMember(Name = "message_base64")]
         public string MessageBase64
         {
             get
             {
-                if (Message == null)
+                if (MessageBuffer == null)
                 {
                     return null;
                 }
                 else
                 {
-                    return Convert.ToBase64String(Message);
+                    return Convert.ToBase64String(MessageBuffer);
                 }
             }
             set
             {
                 if (value == null)
                 {
-                    Message = null;
+                    MessageBuffer = null;
                 }
                 else
                 {
-                    Message = Convert.FromBase64String(value);
+                    MessageBuffer = Convert.FromBase64String(value);
                 }
             }
         }
@@ -126,11 +140,11 @@ namespace PipServices3.Messaging.Queues
         {
             if (message == null)
             {
-                Message = null;
+                MessageBuffer = null;
             }
             else
             {
-                Message = Encoding.UTF8.GetBytes(message);
+                MessageBuffer = Encoding.UTF8.GetBytes(message);
             }
         }
 
@@ -141,13 +155,13 @@ namespace PipServices3.Messaging.Queues
         /// <returns>the value that was stored in this message as a JSON string.</returns>
         public string GetMessageAsString()
         {
-            if (this.Message == null)
+            if (this.MessageBuffer == null)
             {
                 return null;
             }
             else
             {
-                return Encoding.UTF8.GetString(this.Message);
+                return Encoding.UTF8.GetString(this.MessageBuffer);
             }
         }
 
@@ -159,12 +173,12 @@ namespace PipServices3.Messaging.Queues
         {
             if (message == null)
             {
-                Message = null;
+                MessageBuffer = null;
             }
             else
             {
                 var json = JsonConverter.ToJson(message);
-                Message = Encoding.UTF8.GetBytes(json);
+                MessageBuffer = Encoding.UTF8.GetBytes(json);
             }
 
         }
@@ -176,13 +190,13 @@ namespace PipServices3.Messaging.Queues
         /// <returns>the value that was stored in this message as a JSON string.</returns>
         public T GetMessageAs<T>()
         {
-            if (this.Message == null)
+            if (this.MessageBuffer == null)
             {
                 return default(T);
             }
             else
             {
-                var json = Encoding.UTF8.GetString(this.Message);
+                var json = Encoding.UTF8.GetString(this.MessageBuffer);
                 return JsonConverter.FromJson<T>(json);
             }
         }
