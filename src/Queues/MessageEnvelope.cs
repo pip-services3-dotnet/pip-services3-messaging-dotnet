@@ -94,14 +94,8 @@ namespace PipServices3.Messaging.Queues
         [DataMember(Name = "message")]
         public string Message
         {
-            get
-            {
-                return GetMessageAsString();
-            }
-            set
-            {
-                SetMessageAsString(value);
-            }
+            get => GetMessageAsString();
+            set => SetMessageAsString(value);
         }
 
         /** Used for serialization */
@@ -223,5 +217,38 @@ namespace PipServices3.Messaging.Queues
             builder.Append(']');
             return builder.ToString();
         }
+
+        #region Backward Compatibility Properties
+
+        /** The unique business transaction id that is used to trace calls across components. */
+        [DataMember(Name = "CorrelationId")]
+        [Obsolete ("Please use CorrelationId")]
+        public string CorrelationIdEx { get => CorrelationId; set => CorrelationId = value; }
+
+        /** The message's auto-generated ID. */
+        [DataMember(Name = "MessageId")]
+        [Obsolete("Please use MessageId")]
+        public string MessageIdEx { get => MessageId; set => MessageId = value; }
+
+        /** String value that defines the stored message's type. */
+        [DataMember(Name = "MessageType")]
+        [Obsolete("Please use MessageType")] 
+        public string MessageTypeEx { get => MessageType; set => MessageType = value; }
+
+        /** The time at which the message was sent. */
+        [DataMember(Name = "SentTime")]
+        [Obsolete("Please use SentTime")] 
+        public DateTime SentTimeEx { get => SentTime; set => SentTime = value; }
+
+        /** Used for serialization */
+        [DataMember(Name = "Message")]
+        [Obsolete("Please use Message")]
+        public string MessageEx
+        {
+            get => GetMessageAsString();
+            set => SetMessageAsString(value);
+        }
+
+        #endregion
     }
 }
