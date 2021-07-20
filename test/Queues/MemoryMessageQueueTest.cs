@@ -69,17 +69,5 @@ namespace PipServices3.Messaging.Queues
         {
             Fixture.TestMessageCountAsync().Wait();
         }
-
-        [Fact]
-        public void TestSendOldMessageAndReceiveNewMessage()
-        {
-            Fixture.TestSendOldMessageAndReceiveNewMessageAsync().Wait();
-        }
-
-        [Fact]
-        public void TestSendNewMessageAndReceiveOldMessage()
-        {
-            Fixture.TestSendNewMessageAndReceiveOldMessageAsync().Wait();
-        }
     }
 }

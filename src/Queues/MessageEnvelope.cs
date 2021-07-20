@@ -70,61 +70,34 @@ namespace PipServices3.Messaging.Queues
         [IgnoreDataMember]
         public object Reference { get; set; }
 
-        /** The unique business transaction id that is used to trace calls across components. */
-        [DataMember(Name = "correlation_id")]
-        public string CorrelationId { get; set; }
-
-        /** The message's auto-generated ID. */
-        [DataMember(Name = "message_id")]
-        public string MessageId { get; set; }
-
-        /** String value that defines the stored message's type. */
-        [DataMember(Name = "message_type")]
-        public string MessageType { get; set; }
-
-        /** The time at which the message was sent. */
-        [DataMember(Name = "sent_time")]
-        public DateTime SentTime { get; set; }
-
         /** The stored message. */
         [IgnoreDataMember]
         public byte[] MessageBuffer { get; set; }
 
+        /** The unique business transaction id that is used to trace calls across components. */
+        [DataMember(Name = "CorrelationId")]
+        public string CorrelationId { get; set; }
+
+        /** The message's auto-generated ID. */
+        [DataMember(Name = "MessageId")]
+        public string MessageId { get; set; }
+
+        /** String value that defines the stored message's type. */
+        [DataMember(Name = "MessageType")]
+        public string MessageType { get; set; }
+
+        /** The time at which the message was sent. */
+        [DataMember(Name = "SentTime")]
+        public DateTime SentTime { get; set; }
+
         /** Used for serialization */
-        [DataMember(Name = "message")]
+        [DataMember(Name = "Message")]
         public string Message
         {
             get => GetMessageAsString();
             set => SetMessageAsString(value);
         }
 
-        /** Used for serialization */
-        [DataMember(Name = "message_base64")]
-        public string MessageBase64
-        {
-            get
-            {
-                if (MessageBuffer == null)
-                {
-                    return null;
-                }
-                else
-                {
-                    return Convert.ToBase64String(MessageBuffer);
-                }
-            }
-            set
-            {
-                if (value == null)
-                {
-                    MessageBuffer = null;
-                }
-                else
-                {
-                    MessageBuffer = Convert.FromBase64String(value);
-                }
-            }
-        }
 
         /// <summary>
         /// Stores the given value as a string.
@@ -217,38 +190,5 @@ namespace PipServices3.Messaging.Queues
             builder.Append(']');
             return builder.ToString();
         }
-
-        #region Backward Compatibility Properties
-
-        /** The unique business transaction id that is used to trace calls across components. */
-        [DataMember(Name = "CorrelationId")]
-        [Obsolete ("Please use CorrelationId")]
-        public string CorrelationIdEx { get => CorrelationId; set => CorrelationId = value; }
-
-        /** The message's auto-generated ID. */
-        [DataMember(Name = "MessageId")]
-        [Obsolete("Please use MessageId")]
-        public string MessageIdEx { get => MessageId; set => MessageId = value; }
-
-        /** String value that defines the stored message's type. */
-        [DataMember(Name = "MessageType")]
-        [Obsolete("Please use MessageType")] 
-        public string MessageTypeEx { get => MessageType; set => MessageType = value; }
-
-        /** The time at which the message was sent. */
-        [DataMember(Name = "SentTime")]
-        [Obsolete("Please use SentTime")] 
-        public DateTime SentTimeEx { get => SentTime; set => SentTime = value; }
-
-        /** Used for serialization */
-        [DataMember(Name = "Message")]
-        [Obsolete("Please use Message")]
-        public string MessageEx
-        {
-            get => GetMessageAsString();
-            set => SetMessageAsString(value);
-        }
-
-        #endregion
     }
 }
