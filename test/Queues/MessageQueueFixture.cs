@@ -24,7 +24,7 @@ namespace PipServices3.Messaging.Queues
             var envelope2 = await _queue.ReceiveAsync(null, 10000);
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
         }
 
@@ -36,7 +36,7 @@ namespace PipServices3.Messaging.Queues
             var envelope2 = await _queue.ReceiveAsync(null, 10000);
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
 
             await _queue.MoveToDeadLetterAsync(envelope2);
@@ -54,7 +54,7 @@ namespace PipServices3.Messaging.Queues
             var envelope2 = await _queue.ReceiveAsync(null, 10000);
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
         }
 
@@ -65,7 +65,7 @@ namespace PipServices3.Messaging.Queues
             var envelope2 = await _queue.ReceiveAsync(null, 10000);
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
 
             await _queue.CompleteAsync(envelope2);
@@ -80,14 +80,14 @@ namespace PipServices3.Messaging.Queues
             var envelope2 = await _queue.ReceiveAsync(null, 10000);
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
 
             await _queue.AbandonAsync(envelope2);
             envelope2 = await _queue.ReceiveAsync(null, 10000);
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
         }
 
@@ -99,7 +99,7 @@ namespace PipServices3.Messaging.Queues
             var envelope2 = await _queue.PeekAsync(null);
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
         }
 
@@ -133,7 +133,7 @@ namespace PipServices3.Messaging.Queues
 
             Assert.NotNull(envelope2);
             Assert.Equal(envelope1.MessageType, envelope2.MessageType);
-            Assert.Equal(envelope1.MessageBuffer, envelope2.MessageBuffer);
+            Assert.Equal(envelope1.Message, envelope2.Message);
             Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationId);
 
             await _queue.CloseAsync(null);
