@@ -146,5 +146,47 @@ namespace PipServices3.Messaging.Queues
 
             await _queue.CloseAsync(null);
         }
+
+        public async Task TestSendOldMessageAndReceiveNewMessageAsync()
+        {
+            var envelope1 = new MessageEnvelope
+            {
+                CorrelationIdEx = "123",
+                MessageTypeEx = "Test",
+                MessageEx = "Test message"
+            };
+
+            ThreadPool.QueueUserWorkItem(async delegate {
+                Thread.Sleep(500);
+                await _queue.SendAsync(null, envelope1);
+            });
+
+            var envelope2 = await _queue.ReceiveAsync(null, 10000);
+            Assert.NotNull(envelope2);
+            Assert.Equal(envelope1.MessageTypeEx, envelope2.MessageType);
+            Assert.Equal(envelope1.CorrelationIdEx, envelope2.CorrelationId);
+            Assert.Equal(envelope1.MessageEx, envelope2.Message);
+        }
+
+        public async Task TestSendNewMessageAndReceiveOldMessageAsync()
+        {
+            var envelope1 = new MessageEnvelope
+            {
+                CorrelationId = "123",
+                MessageType = "Test",
+                Message = "Test message"
+            };
+
+            ThreadPool.QueueUserWorkItem(async delegate {
+                Thread.Sleep(500);
+                await _queue.SendAsync(null, envelope1);
+            });
+
+            var envelope2 = await _queue.ReceiveAsync(null, 10000);
+            Assert.NotNull(envelope2);
+            Assert.Equal(envelope1.MessageType, envelope2.MessageTypeEx);
+            Assert.Equal(envelope1.CorrelationId, envelope2.CorrelationIdEx);
+            Assert.Equal(envelope1.Message, envelope2.MessageEx);
+        }
     }
 }
