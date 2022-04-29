@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PipServices3.Commons.Config;
+using PipServices3.Commons.Errors;
 using PipServices3.Commons.Refer;
 using PipServices3.Components.Auth;
 using PipServices3.Components.Connect;
@@ -52,12 +53,24 @@ namespace PipServices3.Messaging.Queues
         /// </summary>
         /// <param name="name">(optional) a queue name</param>
         /// <param name="config">configuration parameters</param>
-        public MessageQueue(string name = null, ConfigParams config = null)
+        public MessageQueue(string name = null, MessagingCapabilities capabilities = null)
         {
             Name = name;
-            Capabilities = new MessagingCapabilities(true, true, true, true, true, true, true, true, true);
+            Capabilities = capabilities ?? new MessagingCapabilities(false, false, false, false, false, false, false, false, false);
+        }
 
-            if (config != null) Configure(config);
+        /// <summary>
+        /// Configures component by passing configuration parameters.
+        /// </summary>
+        /// <param name="config">configuration parameters to be set.</param>
+        public virtual void Configure(ConfigParams config)
+        {
+            _logger.Configure(config);
+            _connectionResolver.Configure(config, true);
+            _credentialResolver.Configure(config, true);
+
+            Name = NameResolver.Resolve(config, Name);
+            Name = config.GetAsStringWithDefault("queue", Name);
         }
 
         /// <summary>
@@ -73,25 +86,18 @@ namespace PipServices3.Messaging.Queues
         }
 
         /// <summary>
-        /// Configures component by passing configuration parameters.
-        /// </summary>
-        /// <param name="config">configuration parameters to be set.</param>
-        public virtual void Configure(ConfigParams config)
-        {
-            Name = NameResolver.Resolve(config, Name);
-            _connectionResolver.Configure(config, true);
-            _credentialResolver.Configure(config, true);
-        }
-
-        /// <summary>
         /// Opens the component.
         /// </summary>
         /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
         public async virtual Task OpenAsync(string correlationId)
         {
-            var connection = await _connectionResolver.ResolveAsync(correlationId);
+            var connections = await _connectionResolver.ResolveAllAsync(correlationId);
+            if (connections.Count == 0) {
+                throw new ConfigException(correlationId, "NO_CONNECTION", "Connection parameters are not set");
+            }
+
             var credential = await _credentialResolver.LookupAsync(correlationId);
-            await OpenAsync(correlationId, connection, credential);
+            await OpenAsync(correlationId, connections, credential);
         }
 
         /// <summary>
@@ -104,9 +110,22 @@ namespace PipServices3.Messaging.Queues
         /// Opens the component with given connection and credential parameters.
         /// </summary>
         /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
-        /// <param name="connection">connection parameters</param>
-        /// <param name="credential">credential parameters</param>
-        public abstract Task OpenAsync(string correlationId, ConnectionParams connection, CredentialParams credential);
+        public virtual Task OpenAsync(string correlationId, List<ConnectionParams> connections, CredentialParams credential)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Checks if the message queue has been opened, and throws an exception if it's not.
+        /// </summary>
+        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
+        protected void CheckOpen(string correlationId)
+        {
+            if (!IsOpen())
+            {
+                throw new InvalidStateException(correlationId, "NOT_OPENED", "The queue is not opened");
+            }
+        }
 
         /// <summary>
         /// Closes component and frees used resources.
@@ -124,14 +143,16 @@ namespace PipServices3.Messaging.Queues
         /// </summary>
         public string Name { get; protected set; }
 
-        protected string Kind { get; set; }
-
         /// <summary>
         /// Gets the queue capabilities
         /// </summary>
         public MessagingCapabilities Capabilities { get; protected set; }
 
-        public abstract long? MessageCount { get; }
+        /// <summary>
+        /// Reads the current number of messages in the queue to be delivered.
+        /// </summary>
+        /// <returns>Number of messages to be delivered</returns>
+        public abstract Task<long> ReadMessageCountAsync();
 
         /// <summary>
         /// Sends a message into the queue.
@@ -139,18 +160,6 @@ namespace PipServices3.Messaging.Queues
         /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
         /// <param name="message">a message envelop to be sent.</param>
         public abstract Task SendAsync(string correlationId, MessageEnvelope message);
-
-        /// <summary>
-        /// Sends an object into the queue. 
-        /// </summary>
-        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
-        /// <param name="messageType">a message type</param>
-        /// <param name="message">an object value to be sent</param>
-        public async Task SendAsync(string correlationId, string messageType, string message)
-        {
-            var envelope = new MessageEnvelope(correlationId, messageType, message);
-            await SendAsync(correlationId, envelope);
-        }
 
         /// <summary>
         /// Sends an object into the queue. Before sending the object is converted into JSON string and wrapped in a MessageEnvelop.
@@ -224,12 +233,12 @@ namespace PipServices3.Messaging.Queues
         /// </summary>
         /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
         /// <param name="receiver">a receiver to receive incoming messages.</param>
-        public Task ListenAsync(string correlationId, IMessageReceiver receiver)
-        {
-            return ListenAsync(correlationId, receiver.ReceiveMessageAsync);
-        }
+        public abstract Task ListenAsync(string correlationId, IMessageReceiver receiver);
 
-        public abstract Task ListenAsync(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback);
+        public Task ListenAsync(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback)
+        {
+            return ListenAsync(correlationId, new CallbackMessageReceiver(callback));
+        }
 
         /// <summary>
         /// Listens for incoming messages without blocking the current thread.
@@ -238,14 +247,14 @@ namespace PipServices3.Messaging.Queues
         /// <param name="receiver">a receiver to receive incoming messages.</param>
         public void BeginListen(string correlationId, IMessageReceiver receiver)
         {
-            BeginListen(correlationId, receiver.ReceiveMessageAsync);
+            ThreadPool.QueueUserWorkItem(async delegate {
+                await ListenAsync(correlationId, receiver);
+            });
         }
 
         public void BeginListen(string correlationId, Func<MessageEnvelope, IMessageQueue, Task> callback)
         {
-            ThreadPool.QueueUserWorkItem(async delegate {
-                await ListenAsync(correlationId, callback);
-            });
+            BeginListen(correlationId, new CallbackMessageReceiver(callback));
         }
 
         /// <summary>

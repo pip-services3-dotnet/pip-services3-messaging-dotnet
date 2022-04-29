@@ -19,15 +19,18 @@ namespace PipServices3.Messaging.Queues
         /// Gets the queue name
         /// </summary>
         string Name { get; }
+
         /// <summary>
         /// Gets the queue capabilities
         /// </summary>
         MessagingCapabilities Capabilities { get; }
-        /// <summary>
-        /// Gets the current number of messages in the queue to be delivered.
-        /// </summary>
-        long? MessageCount { get; }
 
+        /// <summary>
+        /// Reads the current number of messages in the queue to be delivered.
+        /// </summary>
+        /// <returns>Number of messages to be delivered</returns>
+        Task<long> ReadMessageCountAsync();
+    
         /// <summary>
         /// Sends a message into the queue.
         /// </summary>
@@ -35,13 +38,6 @@ namespace PipServices3.Messaging.Queues
         /// <param name="envelope">a message envelop to be sent.</param>
         Task SendAsync(string correlationId, MessageEnvelope envelope);
 
-        /// <summary>
-        /// Sends an object into the queue. 
-        /// </summary>
-        /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
-        /// <param name="messageType">a message type</param>
-        /// <param name="message">an object value to be sent</param>
-        Task SendAsync(string correlationId, string messageType, string message);
         /// <summary>
         /// Sends an object into the queue. Before sending the object is converted into JSON string and wrapped in a MessageEnvelop.
         /// </summary>
@@ -57,6 +53,7 @@ namespace PipServices3.Messaging.Queues
         /// <param name="correlationId">(optional) transaction id to trace execution through call chain.</param>
         /// <returns>a message envelop object.</returns>
         Task<MessageEnvelope> PeekAsync(string correlationId);
+
         /// <summary>
         /// Peeks multiple incoming messages from the queue without removing them. If
         /// there are no messages available in the queue it returns an empty list.
